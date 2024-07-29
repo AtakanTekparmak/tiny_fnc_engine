@@ -27,8 +27,48 @@ tiny_fnc_engine/
 └── LICENSE
 ```
 
-## Installation
+## Installation and Usage
 
+### 1. Install from PyPI
+
+1. The package is available on PyPI. You can install it using pip:
+```
+pip install tiny_fnc_engine
+```
+2. Then you can use it in your project as follows:
+```python
+from tiny_fnc_engine import Engine, FunctionCall, Parameter
+
+def get_random_city() -> str:
+    cities = ["New York", "London", "Tokyo", "Paris", "Sydney"]
+    return random.choice(cities)
+
+# Initialize the engine
+engine = Engine()
+
+# Add the function to the engine
+engine.add_function(get_random_city)
+
+# Create function call for get_random_city
+random_city_call = FunctionCall(
+    name='get_random_city',
+    parameters={},
+    returns=[Parameter(name='city', type='str')]
+)
+
+# Call get_random_city function
+city_result = engine.call_function(random_city_call)
+```
+
+### 2. Just grab the code
+
+Since all the code in the library is located in [a single file](https://github.com/AtakanTekparmak/tiny_fnc_engine/blob/main/src/engine.py), you can just download it and use it in your project as follows:
+```bash
+curl -o tiny_fnc_engine.py https://raw.githubusercontent.com/AtakanTekparmak/tiny_fnc_engine/main/src/engine.py
+```
+and then use it the same way as in the PyPI installation.
+
+### 3. Build from Source
 1. Clone the repository:
    ```
    git clone https://github.com/yourusername/tiny_fnc_engine.git
@@ -40,28 +80,15 @@ tiny_fnc_engine/
    make install
    ```
 
-## Usage
+3. Run the main script:
+    ```
+    make run
+    ```
 
-Run the main script:
-```
-make run
-```
-
-This will demonstrate the usage of tiny_fnc_engine with example functions.
-
-## Running Tests
-
-To run the test suite:
-```
-make run_tests
-```
-
-## Cleaning Up
-
-To remove the virtual environment:
-```
-make clean
-```
+4. Run the tests:
+    ```
+    make run_tests
+    ```
 
 ## License
 
