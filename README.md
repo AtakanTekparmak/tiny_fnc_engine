@@ -40,7 +40,7 @@ pip install tiny_fnc_engine
 from tiny_fnc_engine import FunctionCallingEngine
 
 # Initialize the engine and load functions from a python file
-engine = Engine()
+engine = FunctionCallingEngine()
 engine.add_functions_from_file('path/to/functions.py')
 
 # Parse and call functions from an example model response
