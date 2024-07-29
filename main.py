@@ -1,6 +1,7 @@
-from src.engine import FunctionCallingEngine, FunctionCall, Parameter
+from src.engine import FunctionCallingEngine
 import random
 from typing import Dict, Any
+import json
 
 # Simulated functions for demonstration purposes
 def get_random_city() -> str:
@@ -24,30 +25,30 @@ def main():
     # Add functions to the engine
     engine.add_functions([get_random_city, get_weather_forecast])
 
-    # Create function call for get_random_city
-    random_city_call = FunctionCall(
-        name='get_random_city',
-        parameters={},
-        returns=[Parameter(name='city', type='str')]
-    )
+    # Create string-based function call for get_random_city
+    random_city_call = json.dumps({
+        'name': 'get_random_city',
+        'parameters': {},
+        'returns': [{'name': 'city', 'type': 'str'}]
+    })
 
     # Call get_random_city function
-    city_result = engine.call_function(random_city_call)
+    city_result = engine.parse_and_call_functions(random_city_call)[0]
     print(f"Random city selected: {city_result}")
 
-    # Create function call for get_weather_forecast using the result from get_random_city
-    weather_forecast_call = FunctionCall(
-        name='get_weather_forecast',
-        parameters={'city': city_result},
-        returns=[Parameter(name='forecast', type='dict')]
-    )
+    # Create string-based function call for get_weather_forecast using the result from get_random_city
+    weather_forecast_call = json.dumps({
+        'name': 'get_weather_forecast',
+        'parameters': {'city': city_result},
+        'returns': [{'name': 'forecast', 'type': 'dict'}]
+    })
 
     # Call get_weather_forecast function
-    forecast_result = engine.call_function(weather_forecast_call)
+    forecast_result = engine.parse_and_call_functions(weather_forecast_call)[0]
     print(f"Weather forecast: {forecast_result}")
 
-    # Demonstrate chaining these functions using parse_and_call_functions
-    chained_function_calls = [
+    # Demonstrate chaining these functions using parse_and_call_functions with a JSON string
+    chained_function_calls = json.dumps([
         {
             'name': 'get_random_city',
             'parameters': {},
@@ -58,7 +59,7 @@ def main():
             'parameters': {'city': 'random_city'},  # Use the output of get_random_city
             'returns': [{'name': 'forecast', 'type': 'dict'}]
         }
-    ]
+    ])
 
     print("\nDemonstrating chained function calls:")
     results = engine.parse_and_call_functions(chained_function_calls)
