@@ -1,4 +1,7 @@
 from typing import Optional, Union
+import importlib.util
+import os
+
 from pydantic import BaseModel
 
 # Declare type aliases
@@ -88,6 +91,30 @@ class FunctionCallingEngine:
         """
         for function in functions:
             self.functions[function.__name__] = function
+
+    def add_functions_from_file(self, file_path: str) -> None:
+        """
+        Add functions to the engine from a specified .py file.
+
+        file_path: str
+            The path to the .py file containing the functions to be added.
+
+        Raises:
+            FileNotFoundError: If the specified file does not exist.
+        """
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"File {file_path} not found")
+
+        # Use importlib.util to load the module
+        module_name = os.path.basename(file_path).split('.')[0]
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        # Get the user defined functions
+        for name, obj in module.__dict__.items():
+            if callable(obj) and not name.startswith("__") and name != "add_functions_from_file":
+                self.functions[name] = obj
 
     def call_function(self, function_call: FunctionCall) -> ValidOutput:
         """

@@ -2,6 +2,7 @@ import unittest
 from typing import Dict, Any
 import sys
 import os
+import tempfile
 
 # Add the src directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
@@ -109,6 +110,48 @@ class TestFunctionCallingEngine(unittest.TestCase):
         )
         with self.assertRaises(KeyError):
             self.engine.call_function(function_call)
+
+    def test_add_functions_from_file(self):
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as temp_file:
+            temp_file.write("""
+import math
+
+def circle_area(radius):
+    return math.pi * radius ** 2
+
+def square_area(side):
+    return side ** 2
+            """)
+        
+        temp_file_path = temp_file.name
+        temp_file.close()  # Close the file to ensure it's written to disk
+        
+        try:
+            self.engine.add_functions_from_file(temp_file_path)
+            
+            self.assertIn('circle_area', self.engine.functions)
+            self.assertIn('square_area', self.engine.functions)
+            
+            circle_result = self.engine.call_function(FunctionCall(
+                name='circle_area',
+                parameters={'radius': 2},
+                returns=[Parameter(name='result', type='float')]
+            ))
+            self.assertAlmostEqual(circle_result, 12.566370614359172)
+
+            square_result = self.engine.call_function(FunctionCall(
+                name='square_area',
+                parameters={'side': 4},
+                returns=[Parameter(name='result', type='int')]
+            ))
+            self.assertEqual(square_result, 16)
+        finally:
+            # Clean up
+            os.unlink(temp_file_path)
+
+    def test_add_functions_from_file_not_found(self):
+        with self.assertRaises(FileNotFoundError):
+            self.engine.add_functions_from_file('non_existent_file.py')
 
 if __name__ == '__main__':
     unittest.main()
