@@ -1,6 +1,7 @@
 from typing import Optional, Union
 import importlib.util
 import os
+import json
 
 from pydantic import BaseModel
 
@@ -182,7 +183,7 @@ class FunctionCallingEngine:
         
     def parse_and_call_functions(
             self, 
-            function_calls: Union[dict, list[dict]],
+            function_calls: Union[dict, list[dict], str],
             verbose: bool = False
         ) -> list[ValidOutput]:
         """
@@ -192,6 +193,9 @@ class FunctionCallingEngine:
         function_calls: Union[dict, list[dict]]
             The function call(s) to be parsed and called.
         """
+        if isinstance(function_calls, str): 
+            function_calls = json.loads(function_calls)
+
         function_calls = self.parse_function_calls(function_calls)
 
         if verbose:

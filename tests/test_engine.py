@@ -3,6 +3,7 @@ from typing import Dict, Any
 import sys
 import os
 import tempfile
+import json
 
 # Add the src directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
@@ -152,6 +153,76 @@ def square_area(side):
     def test_add_functions_from_file_not_found(self):
         with self.assertRaises(FileNotFoundError):
             self.engine.add_functions_from_file('non_existent_file.py')
+
+    def test_parse_and_call_functions_dict(self):
+        function_call = {
+            'name': 'helper_function',
+            'parameters': {'a': 2, 'b': 3},
+            'returns': [{'name': 'result', 'type': 'int'}]
+        }
+        result = self.engine.parse_and_call_functions(function_call)
+        self.assertEqual(result, [5])
+
+    def test_parse_and_call_functions_list(self):
+        function_calls = [
+            {
+                'name': 'helper_function',
+                'parameters': {'a': 2, 'b': 3},
+                'returns': [{'name': 'result1', 'type': 'int'}]
+            },
+            {
+                'name': 'helper_function_with_dict',
+                'parameters': {'data': {'name': 'Alice', 'age': 30}},
+                'returns': [{'name': 'result2', 'type': 'str'}]
+            }
+        ]
+        results = self.engine.parse_and_call_functions(function_calls)
+        self.assertEqual(results, [5, "Name: Alice, Age: 30"])
+
+    def test_parse_and_call_functions_json_string(self):
+        json_string = json.dumps({
+            'name': 'helper_function',
+            'parameters': {'a': 4, 'b': 5},
+            'returns': [{'name': 'result', 'type': 'int'}]
+        })
+        result = self.engine.parse_and_call_functions(json_string)
+        self.assertEqual(result, [9])
+
+    def test_parse_and_call_functions_json_string_list(self):
+        json_string = json.dumps([
+            {
+                'name': 'helper_function',
+                'parameters': {'a': 4, 'b': 5},
+                'returns': [{'name': 'result1', 'type': 'int'}]
+            },
+            {
+                'name': 'helper_function_with_dict',
+                'parameters': {'data': {'name': 'Bob', 'age': 25}},
+                'returns': [{'name': 'result2', 'type': 'str'}]
+            }
+        ])
+        results = self.engine.parse_and_call_functions(json_string)
+        self.assertEqual(results, [9, "Name: Bob, Age: 25"])
+
+    def test_parse_and_call_functions_verbose(self):
+        function_call = {
+            'name': 'helper_function',
+            'parameters': {'a': 2, 'b': 3},
+            'returns': [{'name': 'result', 'type': 'int'}]
+        }
+        
+        # Redirect stdout to capture print statements
+        import io
+        from contextlib import redirect_stdout
+
+        f = io.StringIO()
+        with redirect_stdout(f):
+            self.engine.parse_and_call_functions(function_call, verbose=True)
+        
+        output = f.getvalue()
+        self.assertIn("Calling function: helper_function", output)
+        self.assertIn("Parameters: {'a': 2, 'b': 3}", output)
+        self.assertIn("Returns: [Parameter(name='result', type='int')]", output)
 
 if __name__ == '__main__':
     unittest.main()
