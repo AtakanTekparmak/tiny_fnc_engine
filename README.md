@@ -37,27 +37,31 @@ pip install tiny_fnc_engine
 ```
 2. Then you can use it in your project as follows:
 ```python
-from tiny_fnc_engine import Engine, FunctionCall, Parameter
+from tiny_fnc_engine import FunctionCallingEngine
 
-def get_random_city() -> str:
-    cities = ["New York", "London", "Tokyo", "Paris", "Sydney"]
-    return random.choice(cities)
-
-# Initialize the engine
+# Initialize the engine and load functions from a python file
 engine = Engine()
+engine.add_functions_from_file('path/to/functions.py')
 
-# Add the function to the engine
-engine.add_function(get_random_city)
+# Parse and call functions from an example model response
+example_response = """
+[
+    {
+        'name': 'get_random_city',
+        'parameters': {},
+        'returns': [{'name': 'random_city', 'type': 'str'}]
+    },
+    {
+        'name': 'get_weather_forecast',
+        'parameters': {'city': 'random_city'},  # Use the output of get_random_city
+        'returns': [{'name': 'forecast', 'type': 'dict'}]
+    }
+]
+"""
+results = engine.parse_and_call_functions(example_response)
 
-# Create function call for get_random_city
-random_city_call = FunctionCall(
-    name='get_random_city',
-    parameters={},
-    returns=[Parameter(name='city', type='str')]
-)
-
-# Call get_random_city function
-city_result = engine.call_function(random_city_call)
+# Print the results
+print(results)
 ```
 
 ### 2. Just grab the code
