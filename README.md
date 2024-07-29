@@ -1,6 +1,6 @@
 # tiny_fnc_engine
 
-tiny_fnc_engine is a minimal python library ([one file, 177 lines of code](https://github.com/AtakanTekparmak/tiny_fnc_engine/blob/main/tiny_fnc_engine/engine.py)) that provides a flexible engine for calling functions extracted from LLM (Large Language Model) outputs in JSON format within an isolated environment. The engine stores functions and their outputs in memory, allowing for chained function calls and parameter referencing.
+tiny_fnc_engine is a minimal python library ([one file, 208 lines of code](https://github.com/AtakanTekparmak/tiny_fnc_engine/blob/main/tiny_fnc_engine/engine.py)) that provides a flexible engine for calling functions extracted from LLM (Large Language Model) outputs in JSON format within an isolated environment. The engine stores functions and their outputs in memory, allowing for chained function calls and parameter referencing.
 
 ## Features
 
@@ -23,6 +23,7 @@ tiny_fnc_engine/
 │   └── test_engine.py
 ├── main.py
 ├── requirements.txt
+├── package_requirements.txt
 ├── Makefile
 └── LICENSE
 ```
