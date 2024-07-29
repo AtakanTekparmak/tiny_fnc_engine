@@ -1,4 +1,4 @@
-from src.engine import FunctionCallingEngine
+from tiny_fnc_engine import FunctionCallingEngine
 import random
 from typing import Dict, Any
 import json
@@ -33,8 +33,9 @@ def main():
     })
 
     # Call get_random_city function
+    print("Demonstrating individual function calls:")   
     city_result = engine.parse_and_call_functions(random_city_call)[0]
-    print(f"Random city selected: {city_result}")
+    print(f"- Random city selected: {city_result}")
 
     # Create string-based function call for get_weather_forecast using the result from get_random_city
     weather_forecast_call = json.dumps({
@@ -45,7 +46,7 @@ def main():
 
     # Call get_weather_forecast function
     forecast_result = engine.parse_and_call_functions(weather_forecast_call)[0]
-    print(f"Weather forecast: {forecast_result}")
+    print(f"- Weather forecast: {forecast_result}")
 
     # Demonstrate chaining these functions using parse_and_call_functions with a JSON string
     chained_function_calls = json.dumps([
@@ -69,8 +70,8 @@ def main():
     weather_forecast = results[1]
     print(f"Random city: {random_city}")
     print(f"Weather forecast for {weather_forecast['city']}:")
-    print(f"  Condition: {weather_forecast['condition']}")
-    print(f"  Temperature: {weather_forecast['temperature']}°C")
+    print(f"-  Condition: {weather_forecast['condition']}")
+    print(f"-  Temperature: {weather_forecast['temperature']}°C")
 
 if __name__ == "__main__":
     main()

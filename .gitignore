@@ -166,3 +166,6 @@ pypi_stuff.toml
 
 # setup.py
 setup.py
+
+# testdir
+testdir/

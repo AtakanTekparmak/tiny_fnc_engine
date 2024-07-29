@@ -5,10 +5,10 @@ import os
 import tempfile
 import json
 
-# Add the src directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+# Add the tiny_fnc_engine directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'tiny_fnc_engine')))
 
-from src.engine import FunctionCallingEngine, FunctionCall, Parameter
+from tiny_fnc_engine.engine import FunctionCallingEngine, FunctionCall, Parameter
 
 def helper_function(a: int, b: int) -> int:
     return a + b

@@ -1,6 +1,6 @@
 # tiny_fnc_engine
 
-tiny_fnc_engine is a minimal python library ([one file, 177 lines of code](https://github.com/AtakanTekparmak/tiny_fnc_engine/blob/main/src/engine.py)) that provides a flexible engine for calling functions extracted from LLM (Large Language Model) outputs in JSON format within an isolated environment. The engine stores functions and their outputs in memory, allowing for chained function calls and parameter referencing.
+tiny_fnc_engine is a minimal python library ([one file, 177 lines of code](https://github.com/AtakanTekparmak/tiny_fnc_engine/blob/main/tiny_fnc_engine/engine.py)) that provides a flexible engine for calling functions extracted from LLM (Large Language Model) outputs in JSON format within an isolated environment. The engine stores functions and their outputs in memory, allowing for chained function calls and parameter referencing.
 
 ## Features
 
@@ -15,7 +15,7 @@ tiny_fnc_engine is a minimal python library ([one file, 177 lines of code](https
 ```
 tiny_fnc_engine/
 │
-├── src/
+├── tiny_fnc_engine/
 │   ├── __init__.py
 │   └── engine.py
 ├── tests/
@@ -47,14 +47,14 @@ engine.add_functions_from_file('path/to/functions.py')
 example_response = """
 [
     {
-        'name': 'get_random_city',
-        'parameters': {},
-        'returns': [{'name': 'random_city', 'type': 'str'}]
+        "name": "get_random_city",
+        "parameters": {},
+        "returns": [{"name": "random_city", "type": "str"}]
     },
     {
-        'name': 'get_weather_forecast',
-        'parameters': {'city': 'random_city'},  # Use the output of get_random_city
-        'returns': [{'name': 'forecast', 'type': 'dict'}]
+        "name": "get_weather_forecast",
+        "parameters": {"city": "random_city"},  
+        "returns": [{"name": "forecast", "type": "dict"}]
     }
 ]
 """
@@ -66,9 +66,9 @@ print(results)
 
 ### 2. Just grab the code
 
-Since all the code in the library is located in [a single file](https://github.com/AtakanTekparmak/tiny_fnc_engine/blob/main/src/engine.py), you can just download it and use it in your project as follows:
+Since all the code in the library is located in [a single file](https://github.com/AtakanTekparmak/tiny_fnc_engine/blob/main/tiny_fnc_engine/engine.py), you can just download it and use it in your project as follows:
 ```bash
-curl -o tiny_fnc_engine.py https://raw.githubusercontent.com/AtakanTekparmak/tiny_fnc_engine/main/src/engine.py
+curl -o tiny_fnc_engine.py https://raw.githubusercontent.com/AtakanTekparmak/tiny_fnc_engine/main/tiny_fnc_engine/engine.py
 ```
 and then use it the same way as in the PyPI installation.
 
