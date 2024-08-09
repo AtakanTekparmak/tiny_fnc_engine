@@ -1,6 +1,6 @@
 # tiny_fnc_engine
 
-tiny_fnc_engine is a minimal python library ([one file, 174 lines of code](https://github.com/AtakanTekparmak/tiny_fnc_engine/blob/main/tiny_fnc_engine/engine.py)) that provides a flexible engine for calling functions extracted from LLM (Large Language Model) outputs in JSON format within an isolated environment. The engine stores functions and their outputs in memory, allowing for chained function calls and parameter referencing.
+tiny_fnc_engine is a minimal python library ([one file, ~200 lines of code](https://github.com/AtakanTekparmak/tiny_fnc_engine/blob/main/tiny_fnc_engine/engine.py)) that provides a flexible engine for calling functions extracted from LLM (Large Language Model) outputs in JSON format. The engine stores functions and their outputs in memory, allowing for chained function calls and parameter referencing. It also supports using Pydantic models for type safety and validation.
 
 ## Features
 
@@ -8,6 +8,7 @@ tiny_fnc_engine is a minimal python library ([one file, 174 lines of code](https
 - Parse function calls from JSON format
 - Chain multiple function calls
 - Store and reference function outputs
+- Support for [Pydantic](https://github.com/pydantic/pydantic) models as function parameters and return values
 
 ## Documentation
 
@@ -46,23 +47,37 @@ pip install tiny_fnc_engine
 2. Then you can use it in your project as follows:
 ```python
 from tiny_fnc_engine import FunctionCallingEngine
+from pydantic import BaseModel
 
-# Initialize the engine and load functions from a python file
+# Define a Pydantic model (optional)
+class User(BaseModel):
+    name: str
+    age: int
+
+def get_user() -> User:
+    return User(name="Alice", age=30)
+
+def greet_user(user: User) -> str:
+    return f"Hello, {user.name}!"
+
+# Initialize the engine and load functions 
 engine = FunctionCallingEngine()
-engine.add_functions_from_file('path/to/functions.py')
+engine.add_functions([get_user, greet_user])
+# Optionally, you can load functions from a file
+# engine.add_functions_from_file('path/to/functions.py')
 
 # Parse and call functions from an example model response
 example_response = """
 [
     {
-        "name": "get_random_city",
+        "name": "get_user",
         "parameters": {},
-        "returns": [{"name": "random_city", "type": "str"}]
+        "returns": [{"name": "user", "type": "User"}]
     },
     {
-        "name": "get_weather_forecast",
-        "parameters": {"city": "random_city"},  
-        "returns": [{"name": "forecast", "type": "dict"}]
+        "name": "greet_user",
+        "parameters": {"user": "user"},  
+        "returns": [{"name": "greeting", "type": "str"}]
     }
 ]
 """
