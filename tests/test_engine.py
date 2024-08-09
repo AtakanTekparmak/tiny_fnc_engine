@@ -1,5 +1,5 @@
 import unittest
-from typing import Dict, Any
+from typing import Dict, Any, Union
 import sys
 import os
 import tempfile
@@ -9,12 +9,22 @@ import json
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'tiny_fnc_engine')))
 
 from tiny_fnc_engine.engine import FunctionCallingEngine, FunctionCall, Parameter
+from pydantic import BaseModel
 
 def helper_function(a: int, b: int) -> int:
     return a + b
 
-def helper_function_with_dict(data: Dict[str, Any]) -> str:
-    return f"Name: {data['name']}, Age: {data['age']}"
+def helper_function_with_dict(data: Union[Dict[str, Any], BaseModel]) -> str:
+    if isinstance(data, Person):
+        return f"Name: {data.name}, Age: {data.age}"
+    elif isinstance(data, dict):
+        return f"Name: {data['name']}, Age: {data['age']}"
+    else:
+        raise ValueError("Invalid data type")
+
+class Person(BaseModel):
+    name: str
+    age: int
 
 class TestFunctionCallingEngine(unittest.TestCase):
     def setUp(self):
@@ -223,6 +233,26 @@ def square_area(side):
         self.assertIn("Calling function: helper_function", output)
         self.assertIn("Parameters: {'a': 2, 'b': 3}", output)
         self.assertIn("Returns: [Parameter(name='result', type='int')]", output)
+
+    def test_call_function_with_pydantic_model(self):
+        function_call = FunctionCall(
+            name='helper_function_with_dict',
+            parameters={'data': Person(name='Alice', age=30)},
+            returns=[Parameter(name='result', type='str')]
+        )
+        result = self.engine.call_function(function_call)
+        self.assertEqual(result, "Name: Alice, Age: 30")
+        self.assertEqual(self.engine.outputs['result'], "Name: Alice, Age: 30")
+
+    def test_parse_and_call_functions_with_pydantic_model_as_json(self):
+        json_string = json.dumps({
+            'name': 'helper_function_with_dict',
+            'parameters': {'data': {'name': 'Alice', 'age': 30}},
+            'returns': [{'name': 'result', 'type': 'str'}]
+        })
+        result = self.engine.parse_and_call_functions(json_string)
+        self.assertEqual(result, ["Name: Alice, Age: 30"])
+
 
 if __name__ == '__main__':
     unittest.main()

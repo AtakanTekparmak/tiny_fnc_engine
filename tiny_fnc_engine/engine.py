@@ -6,7 +6,7 @@ import json
 from pydantic import BaseModel
 
 # Declare type aliases
-ValidParameter = Union[str, int, float, bool, dict, list]
+ValidParameter = Union[str, int, float, bool, dict, list, BaseModel]
 ValidOutput = ValidParameter
 
 # Declare constants
