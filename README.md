@@ -9,6 +9,7 @@ tiny_fnc_engine is a minimal python library ([one file, ~200 lines of code](http
 - Chain multiple function calls
 - Store and reference function outputs
 - Support for [Pydantic](https://github.com/pydantic/pydantic) models as function parameters and return values
+- Reset session to clear stored outputs
 
 ## Documentation
 
@@ -81,10 +82,13 @@ example_response = """
     }
 ]
 """
-results = engine.parse_and_call_functions(example_response)
+results = engine.parse_and_call_functions(example_response, verbose=True)
 
 # Print the results
 print(results)
+
+# Reset the session if needed
+engine.reset_session()
 ```
 
 ### 2. Just grab the code

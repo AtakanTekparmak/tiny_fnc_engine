@@ -125,6 +125,8 @@ print(result[0])  # Output: Hello, Alice!</code></pre>
         <li>Parse function calls from JSON format</li>
         <li>Chain multiple function calls</li>
         <li>Store and reference function outputs</li>
+        <li>Support for Pydantic models as function parameters and return values</li>
+        <li>Reset session to clear stored outputs</li>
         <li>Minimal codebase (one file, 174 lines of code)</li>
     </ul>
 
@@ -187,22 +189,29 @@ engine.add_functions_from_file('path/to/functions.py')</code></pre>
     <pre><code class="language-python">json_string = '''
 {
     "name": "function_name",
-    "parameters": {"param1": "value1", "param2": 42}
+    "parameters": {"param1": "value1", "param2": 42},
+    "returns": [{"name": "result", "type": "str"}]
 }
-'''</code></pre>
+'''
+result = engine.parse_and_call_functions(json_string)
+    </code></pre>
     <p>or</p>
     <pre><code class="language-python">json_string = '''
 [
     {
         "name": "function1",
-        "parameters": {"param1": "value1"}
+        "parameters": {"param1": "value1"},
+        "returns": [{"name": "result1", "type": "int"}]
     },
     {
         "name": "function2",
-        "parameters": {"param2": 42}
+        "parameters": {"param2": 42},
+        "returns": [{"name": "result2", "type": "str"}]
     }
 ]
-'''</code></pre>
+'''
+results = engine.parse_and_call_functions(json_string)
+    </code></pre>
 
     <h2 id="api-reference">API Reference</h2>
     <h3>FunctionCallingEngine</h3>
@@ -216,7 +225,7 @@ engine.add_functions_from_file('path/to/functions.py')</code></pre>
         <li><code>call_function(self, function_call: FunctionCall) -> ValidOutput</code>: Call a single function from the engine.</li>
         <li><code>call_functions(self, function_calls: list[FunctionCall]) -> list[ValidOutput]</code>: Call multiple functions from the engine.</li>
         <li><code>parse_function_calls(self, function_calls: Union[dict, list[dict]]) -> list[FunctionCall]</code>: Parse either a single function call or a list of function calls.</li>
-        <li><code>parse_and_call_functions(self, function_calls: Union[dict, list[dict], str], verbose: bool = False) -> list[ValidOutput]</code>: Parse and call either a single function call or a list of function calls.</li>
+        <li><code>parse_and_call_functions(self, function_calls: Union[dict, list[dict], str], verbose: bool = False) -> list[ValidOutput]</code>: Parse and call either a single function call or a list of function calls. The <code>verbose</code> parameter, when set to True, prints details about each function call.</li>
     </ul>
 
     <h3>reset_session()</h3>
@@ -287,6 +296,37 @@ function_calls = [
 
 results = engine.parse_and_call_functions(function_calls)
 print(f"Sum: {results[0]}, Product: {results[1]}")</code></pre>
+
+    <h3>3. Using JSON String Input</h3>
+    <pre><code class="language-python">import json
+from tiny_fnc_engine import FunctionCallingEngine
+
+def greet(name):
+    return f"Hello, {name}!"
+
+def calculate_sum(a, b):
+    return a + b
+
+engine = FunctionCallingEngine()
+engine.add_functions([greet, calculate_sum])
+
+json_string = json.dumps([
+    {
+        "name": "greet",
+        "parameters": {"name": "Alice"},
+        "returns": [{"name": "greeting", "type": "str"}]
+    },
+    {
+        "name": "calculate_sum",
+        "parameters": {"a": 5, "b": 3},
+        "returns": [{"name": "sum", "type": "int"}]
+    }
+])
+
+results = engine.parse_and_call_functions(json_string, verbose=True)
+print(f"Greeting: {results[0]}")
+print(f"Sum: {results[1]}")
+    </code></pre>
 
     <h2 id="contributing">Contributing</h2>
     <p>Contributions to tiny_fnc_engine are welcome! Please feel free to submit a Pull Request.</p>
