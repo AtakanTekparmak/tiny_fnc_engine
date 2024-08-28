@@ -31,6 +31,9 @@ class TestFunctionCallingEngine(unittest.TestCase):
         self.engine = FunctionCallingEngine()
         self.engine.add_functions([helper_function, helper_function_with_dict])
 
+    def tearDown(self):
+        self.engine.reset_session()
+
     def test_call_function(self):
         function_call = FunctionCall(
             name='helper_function',
@@ -88,8 +91,9 @@ class TestFunctionCallingEngine(unittest.TestCase):
         self.assertIsInstance(parsed[1], FunctionCall)
 
     def test_parse_function_calls_invalid_input(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as context:
             self.engine.parse_function_calls({'invalid': 'format'})
+        self.assertIn("The function call is invalid", str(context.exception))
 
     def test_parse_function_calls_invalid_type(self):
         with self.assertRaises(TypeError):
@@ -253,6 +257,35 @@ def square_area(side):
         result = self.engine.parse_and_call_functions(json_string)
         self.assertEqual(result, ["Name: Alice, Age: 30"])
 
+    def test_reset_session(self):
+        function_call = FunctionCall(
+            name='helper_function',
+            parameters={'a': 2, 'b': 3},
+            returns=[Parameter(name='result', type='int')]
+        )
+        self.engine.call_function(function_call)
+        self.assertEqual(self.engine.outputs['result'], 5)
+        
+        self.engine.reset_session()
+        self.assertEqual(self.engine.outputs, {})
+
+    def test_chained_function_calls(self):
+        function_calls = [
+            {
+                'name': 'helper_function',
+                'parameters': {'a': 2, 'b': 3},
+                'returns': [{'name': 'sum', 'type': 'int'}]
+            },
+            {
+                'name': 'helper_function',
+                'parameters': {'a': 'sum', 'b': 4},
+                'returns': [{'name': 'final_result', 'type': 'int'}]
+            }
+        ]
+        results = self.engine.parse_and_call_functions(function_calls)
+        self.assertEqual(results, [5, 9])
+        self.assertEqual(self.engine.outputs['sum'], 5)
+        self.assertEqual(self.engine.outputs['final_result'], 9)
 
 if __name__ == '__main__':
     unittest.main()
