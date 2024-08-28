@@ -52,13 +52,14 @@ class FunctionCall(BaseModel):
 
     name: str
         The name of the function.
-    parameters: list[Parameter]
+    parameters: dict[str, ValidParameter]
         The parameters of the function.
     returns: Optional[list[Parameter]]
-        The return values of the function. If the
-        used function call format does not support
-        the "returns" field, this schema will still
-        be valid.
+        The return values of the function. 
+        
+        If the used function call format does not 
+        support the "returns" field, this schema 
+        will still be valid.
 
     """
     name: str
@@ -74,8 +75,8 @@ class FunctionCallingEngine:
     outputs in memory. 
     """
     def __init__(self):
-        self.functions = {}
-        self.outputs = {}
+        self.functions: dict[str, callable] = {}
+        self.outputs: dict[str, ValidOutput] = {}
 
     def reset_session(self) -> None:
         """
@@ -137,13 +138,12 @@ class FunctionCallingEngine:
         output = function(**parameters)  # Use ** to unpack the dictionary as keyword arguments
 
         # Store the output
-        if len(function_call.returns) == 1:
-            self.outputs[function_call.returns[0].name] = output
-        elif len(function_call.returns) > 1:
-            for i, return_value in enumerate(function_call.returns):
-                self.outputs[return_value.name] = output[i]
-        else:
-            raise ValueError(INVALID_FUNCTION_CALL_ERROR)
+        if function_call.returns:
+            if len(function_call.returns) == 1:
+                self.outputs[function_call.returns[0].name] = output
+            else:
+                for i, return_value in enumerate(function_call.returns):
+                    self.outputs[return_value.name] = output[i]
         
         return output
     
@@ -169,18 +169,15 @@ class FunctionCallingEngine:
             The function call(s) to be parsed.
         """
         if isinstance(function_calls, dict):
-            try:
-                return [FunctionCall(**function_calls)]
-            except Exception as _:
-                raise ValueError(INVALID_FUNCTION_CALL_ERROR)
-        elif isinstance(function_calls, list):
-            try:
-                return [FunctionCall(**function_call) for function_call in function_calls]
-            except Exception as _:
-                raise ValueError(INVALID_FUNCTION_CALL_ERROR)
-        else:
-            raise TypeError(INVALID_FUNCTION_CALL_ERROR)
-        
+            function_calls = [function_calls]
+        elif not isinstance(function_calls, list):
+            raise TypeError("Input must be a dictionary or a list of dictionaries")
+
+        try:
+            return [FunctionCall(**function_call) for function_call in function_calls]
+        except Exception:
+            raise ValueError(INVALID_FUNCTION_CALL_ERROR)
+
     def parse_and_call_functions(
             self, 
             function_calls: Union[dict, list[dict], str],
@@ -205,4 +202,3 @@ class FunctionCallingEngine:
                 print(f"Returns: {function_call.returns}")
 
         return self.call_functions(function_calls)
-        
