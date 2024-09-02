@@ -326,5 +326,56 @@ def square_area(side):
         results = self.engine.parse_and_call_functions(tool_call)
         self.assertEqual(results, ["Rain probability for San Francisco, CA is 20%"])
 
+    def test_parse_and_call_openai_tool_call_multiple(self):
+        def get_rain_probability(location: str) -> str:
+            return f"Rain probability for {location} is 20%"
+
+        def get_temperature(location: str) -> str:
+            return f"Temperature for {location} is 68°F"
+
+        self.engine.add_functions([get_rain_probability, get_temperature])
+
+        tool_call = {
+            "tool_calls": [
+                {
+                    "id": "call_1",
+                    "function": {
+                        "arguments": '{"location": "San Francisco, CA"}',
+                        "name": "get_rain_probability"
+                    },
+                    "type": "function"
+                },
+                {
+                    "id": "call_2",
+                    "function": {
+                        "arguments": '{"location": "San Francisco, CA"}',
+                        "name": "get_temperature"
+                    },
+                    "type": "function"
+                }
+            ]
+        }
+        results = self.engine.parse_and_call_functions(tool_call)
+        self.assertEqual(results, [
+            "Rain probability for San Francisco, CA is 20%",
+            "Temperature for San Francisco, CA is 68°F"
+        ])
+
+    def test_parse_and_call_openai_tool_call_with_pydantic_model(self):
+        tool_call = {
+            "tool_calls": [
+                {
+                    "id": "call_1",
+                    "function": {
+                        "arguments": '{"data": {"name": "Alice", "age": 30}}',
+                        "name": "helper_function_with_dict"
+                    },
+                    "type": "function"
+                }
+            ]
+        }
+        results = self.engine.parse_and_call_functions(tool_call)
+        self.assertEqual(results, ["Name: Alice, Age: 30"])
+
 if __name__ == '__main__':
     unittest.main()
