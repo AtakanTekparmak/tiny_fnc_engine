@@ -287,5 +287,44 @@ def square_area(side):
         self.assertEqual(self.engine.outputs['sum'], 5)
         self.assertEqual(self.engine.outputs['final_result'], 9)
 
+    def test_parse_openai_tool_call(self):
+        tool_call = {
+            "tool_calls": [
+                {
+                    "id": "call_FthC9qRpsL5kBpwwyw6c7j4k",
+                    "function": {
+                        "arguments": '{"location": "San Francisco, CA"}',
+                        "name": "get_rain_probability"
+                    },
+                    "type": "function"
+                }
+            ]
+        }
+        parsed = self.engine.parse_function_calls(tool_call)
+        self.assertEqual(len(parsed), 1)
+        self.assertEqual(parsed[0].name, 'get_rain_probability')
+        self.assertEqual(parsed[0].parameters, {"location": "San Francisco, CA"})
+
+    def test_parse_and_call_openai_tool_call(self):
+        def get_rain_probability(location: str) -> str:
+            return f"Rain probability for {location} is 20%"
+
+        self.engine.add_functions([get_rain_probability])
+
+        tool_call = {
+            "tool_calls": [
+                {
+                    "id": "call_FthC9qRpsL5kBpwwyw6c7j4k",
+                    "function": {
+                        "arguments": '{"location": "San Francisco, CA"}',
+                        "name": "get_rain_probability"
+                    },
+                    "type": "function"
+                }
+            ]
+        }
+        results = self.engine.parse_and_call_functions(tool_call)
+        self.assertEqual(results, ["Rain probability for San Francisco, CA is 20%"])
+
 if __name__ == '__main__':
     unittest.main()
