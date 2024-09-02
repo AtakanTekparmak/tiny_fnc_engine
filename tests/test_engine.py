@@ -288,19 +288,17 @@ def square_area(side):
         self.assertEqual(self.engine.outputs['final_result'], 9)
 
     def test_parse_openai_tool_call(self):
-        tool_call = {
-            "tool_calls": [
-                {
-                    "id": "call_FthC9qRpsL5kBpwwyw6c7j4k",
-                    "function": {
+        tool_calls = [
+            {   
+                "id": "call_FthC9qRpsL5kBpwwyw6c7j4k",
+                "function": {
                         "arguments": '{"location": "San Francisco, CA"}',
                         "name": "get_rain_probability"
-                    },
-                    "type": "function"
-                }
-            ]
-        }
-        parsed = self.engine.parse_function_calls(tool_call)
+                },
+                "type": "function"
+            }
+        ]
+        parsed = self.engine.parse_function_calls(tool_calls)
         self.assertEqual(len(parsed), 1)
         self.assertEqual(parsed[0].name, 'get_rain_probability')
         self.assertEqual(parsed[0].parameters, {"location": "San Francisco, CA"})
@@ -311,18 +309,16 @@ def square_area(side):
 
         self.engine.add_functions([get_rain_probability])
 
-        tool_call = {
-            "tool_calls": [
-                {
-                    "id": "call_FthC9qRpsL5kBpwwyw6c7j4k",
-                    "function": {
-                        "arguments": '{"location": "San Francisco, CA"}',
-                        "name": "get_rain_probability"
-                    },
-                    "type": "function"
-                }
-            ]
-        }
+        tool_call = [
+            {
+                "id": "call_FthC9qRpsL5kBpwwyw6c7j4k",
+                "function": {
+                    "arguments": '{"location": "San Francisco, CA"}',
+                    "name": "get_rain_probability"
+                },
+                "type": "function"
+            }
+        ]
         results = self.engine.parse_and_call_functions(tool_call)
         self.assertEqual(results, ["Rain probability for San Francisco, CA is 20%"])
 
@@ -335,46 +331,42 @@ def square_area(side):
 
         self.engine.add_functions([get_rain_probability, get_temperature])
 
-        tool_call = {
-            "tool_calls": [
-                {
-                    "id": "call_1",
-                    "function": {
-                        "arguments": '{"location": "San Francisco, CA"}',
-                        "name": "get_rain_probability"
-                    },
-                    "type": "function"
+        tool_calls = [
+            {
+                "id": "call_1",
+                "function": {
+                    "arguments": '{"location": "San Francisco, CA"}',
+                    "name": "get_rain_probability"
                 },
-                {
-                    "id": "call_2",
-                    "function": {
-                        "arguments": '{"location": "San Francisco, CA"}',
-                        "name": "get_temperature"
-                    },
-                    "type": "function"
-                }
-            ]
-        }
-        results = self.engine.parse_and_call_functions(tool_call)
+                "type": "function"
+            },
+            {
+                "id": "call_2",
+                "function": {
+                    "arguments": '{"location": "San Francisco, CA"}',
+                    "name": "get_temperature"
+                },
+                "type": "function"
+            }
+        ]
+        results = self.engine.parse_and_call_functions(tool_calls)
         self.assertEqual(results, [
             "Rain probability for San Francisco, CA is 20%",
             "Temperature for San Francisco, CA is 68°F"
         ])
 
     def test_parse_and_call_openai_tool_call_with_pydantic_model(self):
-        tool_call = {
-            "tool_calls": [
-                {
-                    "id": "call_1",
-                    "function": {
-                        "arguments": '{"data": {"name": "Alice", "age": 30}}',
-                        "name": "helper_function_with_dict"
-                    },
-                    "type": "function"
-                }
-            ]
-        }
-        results = self.engine.parse_and_call_functions(tool_call)
+        tool_calls = [
+            {
+                "id": "call_1",
+                "function": {
+                    "arguments": '{"data": {"name": "Alice", "age": 30}}',
+                    "name": "helper_function_with_dict"
+                },
+                "type": "function"
+            }
+        ]
+        results = self.engine.parse_and_call_functions(tool_calls)
         self.assertEqual(results, ["Name: Alice, Age: 30"])
 
 if __name__ == '__main__':

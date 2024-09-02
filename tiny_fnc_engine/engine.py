@@ -217,9 +217,8 @@ class FunctionCallingEngine:
 
         parsed_calls = []
         for call in function_calls:
-            if 'tool_calls' in call:
-                for tool_call in call['tool_calls']:
-                    parsed_calls.append(self._convert_openai_tool_call(tool_call))
+            if 'id' in call and 'function' in call and 'type' in call:
+                parsed_calls.append(self._convert_openai_tool_call(call))
             else:
                 try:
                     parsed_calls.append(FunctionCall(**call))
