@@ -110,3 +110,32 @@ body.dark-mode {
     --sidebar-bg-color: #2d2d2d;
     --sidebar-text-color: #f0f0f0;
 }
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.prev-button,
+.next-button {
+    padding: 10px 15px;
+    background-color: var(--link-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.prev-button:hover,
+.next-button:hover {
+    background-color: #0056b3;
+}
+
+.prev-button::before {
+    content: "← ";
+}
+
+.next-button::after {
+    content: " →";
+}
