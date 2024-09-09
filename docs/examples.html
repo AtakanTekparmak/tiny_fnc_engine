@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tiny_fnc_engine Documentation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>tiny_fnc_engine</h2>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+<li><a href="installation.html">Installation</a></li>
+<li><a href="function-loading.html">Function Loading</a></li>
+<li><a href="function-call-formats.html">Function Call Formats</a></li>
+<li><a href="examples.html">Examples</a></li>
+<li><a href="api-reference.html">API Reference</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="content">
+        <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</div>
+        
+        <h2 id="examples">Examples</h2>
+        <h3>1. Chaining Function Calls</h3>
+        <pre><code class="language-python">from tiny_fnc_engine import FunctionCallingEngine
+import random
+
+def get_random_city():
+    cities = ["New York", "London", "Tokyo", "Paris", "Sydney"]
+    return random.choice(cities)
+
+def get_weather_forecast(city):
+    weather_conditions = ["Sunny", "Rainy", "Cloudy", "Snowy"]
+    temperature = random.randint(0, 35)
+    return {
+        "city": city,
+        "condition": random.choice(weather_conditions),
+        "temperature": temperature
+    }
+
+engine = FunctionCallingEngine()
+engine.add_functions([get_random_city, get_weather_forecast])
+
+function_calls = [
+    {
+        "name": "get_random_city",
+        "parameters": {},
+        "returns": [{"name": "random_city", "type": "str"}]
+    },
+    {
+        "name": "get_weather_forecast",
+        "parameters": {"city": "random_city"},
+        "returns": [{"name": "forecast", "type": "dict"}]
+    }
+]
+
+results = engine.parse_and_call_functions(function_calls)
+print(f"Random city: {results[0]}")
+print(f"Weather forecast: {results[1]}")</code></pre>
+        
+        <h3>2. Non-chained Function Calls</h3>
+        <pre><code class="language-python">def add(a, b):
+    return a + b
+
+def multiply(a, b):
+    return a * b
+
+engine = FunctionCallingEngine()
+engine.add_functions([add, multiply])
+
+function_calls = [
+    {
+        "name": "add",
+        "parameters": {"a": 5, "b": 3}
+    },
+    {
+        "name": "multiply",
+        "parameters": {"a": 4, "b": 7}
+    }
+]
+
+results = engine.parse_and_call_functions(function_calls)
+print(f"Sum: {results[0]}, Product: {results[1]}")</code></pre>
+        
+        <h3>3. Using JSON String Input</h3>
+        <pre><code class="language-python">import json
+from tiny_fnc_engine import FunctionCallingEngine
+
+def greet(name):
+    return f"Hello, {name}!"
+
+def calculate_sum(a, b):
+    return a + b
+
+engine = FunctionCallingEngine()
+engine.add_functions([greet, calculate_sum])
+
+json_string = json.dumps([
+    {
+        "name": "greet",
+        "parameters": {"name": "Alice"},
+        "returns": [{"name": "greeting", "type": "str"}]
+    },
+    {
+        "name": "calculate_sum",
+        "parameters": {"a": 5, "b": 3},
+        "returns": [{"name": "sum", "type": "int"}]
+    }
+])
+
+results = engine.parse_and_call_functions(json_string, verbose=True)
+print(f"Greeting: {results[0]}")
+print(f"Sum: {results[1]}")
+        </code></pre>
+
+        <div class="navigation-buttons">
+            <a href="function-call-formats.html" class="prev-button">Previous: Function Call Formats</a>
+            <a href="api-reference.html" class="next-button">Next: API Reference</a>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>  
+    <script src="script.js"></script>
+</body>
+</html>

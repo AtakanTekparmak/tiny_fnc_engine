@@ -5,96 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tiny_fnc_engine Documentation</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
-    <style>
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #333333;
-            --link-color: #0066cc;
-            --code-bg-color: #f5f2f0;
-            --highlight-bg-color: #fffacd;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        h1, h2, h3 {
-            color: var(--text-color);
-        }
-
-        a {
-            color: var(--link-color);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        pre, code {
-            background-color: var(--code-bg-color);
-            border-radius: 4px;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        pre {
-            padding: 10px;
-            overflow-x: auto;
-        }
-
-        .highlight {
-            background-color: var(--highlight-bg-color);
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-
-        .dark-mode-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            cursor: pointer;
-        }
-
-        body.dark-mode {
-            --bg-color: #1e1e1e;
-            --text-color: #f0f0f0;
-            --link-color: #4da6ff;
-            --code-bg-color: #2d2d2d;
-            --highlight-bg-color: #3f3f3f;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</div>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>tiny_fnc_engine</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+<li><a href="installation.html">Installation</a></li>
+<li><a href="function-loading.html">Function Loading</a></li>
+<li><a href="function-call-formats.html">Function Call Formats</a></li>
+<li><a href="examples.html">Examples</a></li>
+<li><a href="api-reference.html">API Reference</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="content">
+        <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</div>
+        <h1>tiny_fnc_engine Documentation</h1>
+        
+        <p>Welcome to the tiny_fnc_engine documentation. Use the sidebar to navigate through different sections of the documentation.</p>
+        
+        <h2 id="introduction">Introduction</h2>
+        <p>tiny_fnc_engine is a minimal Python library that provides a flexible engine for calling functions extracted from Large Language Model (LLM) outputs in JSON format. The engine stores functions and their outputs in memory, allowing for chained function calls and parameter referencing.</p>
+        
+        <h2 id="features">Features</h2>
+        <ul>
+            <li>Add and call functions dynamically</li>
+            <li>Parse function calls from JSON or string format</li>
+            <li>Chain multiple function calls</li>
+            <li>Store and reference function outputs</li>
+            <li>Support for Pydantic models as function parameters and return values</li>
+            <li>Reset session to clear stored outputs</li>
+            <li>Minimal codebase (one file, 211 lines of code)</li>
+            <li>Parse & call functions from OpenAI compatible "tool_calls" format</li>
+        </ul>
 
-    <h1>tiny_fnc_engine Documentation</h1>
-
-    <h2>Table of Contents</h2>
-    <ol>
-        <li><a href="#introduction">Introduction</a></li>
-        <li><a href="#quickstart">Quickstart</a></li>
-        <li><a href="#installation">Installation</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#function-loading">Function Loading</a></li>
-        <li><a href="#function-call-formats">Function Call Formats</a></li>
-        <li><a href="#api-reference">API Reference</a></li>
-        <li><a href="#examples">Examples</a></li>
-        <li><a href="#contributing">Contributing</a></li>
-        <li><a href="#license">License</a></li>
-    </ol>
-
-    <h2 id="introduction">Introduction</h2>
-    <p>tiny_fnc_engine is a minimal Python library that provides a flexible engine for calling functions extracted from Large Language Model (LLM) outputs in JSON format. The engine stores functions and their outputs in memory, allowing for chained function calls and parameter referencing.</p>
-
-    <h2 id="quickstart">Quickstart</h2>
-    <pre><code class="language-python">from tiny_fnc_engine import FunctionCallingEngine
+        <h2 id="quickstart">Quickstart</h2>
+        <pre><code class="language-python">from tiny_fnc_engine import FunctionCallingEngine
 
 # Initialize the engine
 engine = FunctionCallingEngine()
@@ -113,233 +64,13 @@ result = engine.parse_and_call_functions({
 })
 
 print(result[0])  # Output: Hello, Alice!</code></pre>
-
-    <h2 id="installation">Installation</h2>
-    <p>You can install tiny_fnc_engine using pip:</p>
-    <pre><code class="language-bash">pip install tiny_fnc_engine</code></pre>
-    <p>Alternatively, you can download the <code>engine.py</code> file directly from the GitHub repository and include it in your project.</p>
-
-    <h2 id="features">Features</h2>
-    <ul>
-        <li>Add and call functions dynamically</li>
-        <li>Parse function calls from JSON format</li>
-        <li>Chain multiple function calls</li>
-        <li>Store and reference function outputs</li>
-        <li>Support for Pydantic models as function parameters and return values</li>
-        <li>Reset session to clear stored outputs</li>
-        <li>Minimal codebase (one file, 174 lines of code)</li>
-    </ul>
-
-    <h2 id="function-loading">Function Loading</h2>
-    <p>tiny_fnc_engine offers two main ways to load functions into the engine:</p>
-    <h3>1. Direct Function Loading</h3>
-    <pre><code class="language-python">def my_function(param1, param2):
-    return param1 + param2
-
-engine = FunctionCallingEngine()
-engine.add_functions([my_function])</code></pre>
-
-    <h3>2. Loading from a File</h3>
-    <pre><code class="language-python">engine = FunctionCallingEngine()
-engine.add_functions_from_file('path/to/functions.py')</code></pre>
-    <p>This method will load all callable objects in the specified file that don't start with "__" into the engine.</p>
-
-    <h2 id="function-call-formats">Function Call Formats</h2>
-    <p>tiny_fnc_engine supports multiple formats for function calls. The primary format, which allows for chaining functions and referencing previous outputs, includes a "returns" field:</p>
-
-    <div class="highlight">
-        <h3>Function Calls with Returns (Recommended for Chaining)</h3>
-        <pre><code class="language-python">function_calls = [
-    {
-        "name": "function1",
-        "parameters": {"param1": value1},
-        "returns": [{"name": "return1", "type": "type1"}]
-    },
-    {
-        "name": "function2",
-        "parameters": {"param2": "return1"},
-        "returns": [{"name": "return2", "type": "type2"}]
-    }
-]</code></pre>
-        <p>This format is particularly useful when you need to chain function calls or reference outputs from previous functions. The "returns" field allows you to specify names for the function outputs, which can then be used as parameters in subsequent function calls.</p>
+        
+        <div class="navigation-buttons">
+            <a href="installation.html" class="next-button">Next: Installation</a>
+        </div>
     </div>
-
-    <p>For simpler use cases where chaining is not required, you can use the following formats:</p>
-
-    <h3>1. Single Function Call (Dictionary)</h3>
-    <pre><code class="language-python">function_call = {
-    "name": "function_name",
-    "parameters": {"param1": value1, "param2": value2}
-}</code></pre>
-
-    <h3>2. Multiple Function Calls (List of Dictionaries)</h3>
-    <pre><code class="language-python">function_calls = [
-    {
-        "name": "function1",
-        "parameters": {"param1": value1}
-    },
-    {
-        "name": "function2",
-        "parameters": {"param2": value2}
-    }
-]</code></pre>
-
-    <h3>3. JSON String</h3>
-    <p>The engine also accepts JSON strings representing either a single function call or multiple function calls:</p>
-    <pre><code class="language-python">json_string = '''
-{
-    "name": "function_name",
-    "parameters": {"param1": "value1", "param2": 42},
-    "returns": [{"name": "result", "type": "str"}]
-}
-'''
-result = engine.parse_and_call_functions(json_string)
-    </code></pre>
-    <p>or</p>
-    <pre><code class="language-python">json_string = '''
-[
-    {
-        "name": "function1",
-        "parameters": {"param1": "value1"},
-        "returns": [{"name": "result1", "type": "int"}]
-    },
-    {
-        "name": "function2",
-        "parameters": {"param2": 42},
-        "returns": [{"name": "result2", "type": "str"}]
-    }
-]
-'''
-results = engine.parse_and_call_functions(json_string)
-    </code></pre>
-
-    <h2 id="api-reference">API Reference</h2>
-    <h3>FunctionCallingEngine</h3>
-    <p>The main class of the tiny_fnc_engine library.</p>
-    <h4>Methods:</h4>
-    <ul>
-        <li><code>__init__(self)</code>: Initialize the FunctionCallingEngine.</li>
-        <li><code>reset_session(self) -> None</code>: Reset the session of the engine, clearing stored outputs.</li>
-        <li><code>add_functions(self, functions: list[callable]) -> None</code>: Add functions to the engine.</li>
-        <li><code>add_functions_from_file(self, file_path: str) -> None</code>: Add functions to the engine from a specified .py file.</li>
-        <li><code>call_function(self, function_call: FunctionCall) -> ValidOutput</code>: Call a single function from the engine.</li>
-        <li><code>call_functions(self, function_calls: list[FunctionCall]) -> list[ValidOutput]</code>: Call multiple functions from the engine.</li>
-        <li><code>parse_function_calls(self, function_calls: Union[dict, list[dict]]) -> list[FunctionCall]</code>: Parse either a single function call or a list of function calls.</li>
-        <li><code>parse_and_call_functions(self, function_calls: Union[dict, list[dict], str], verbose: bool = False) -> list[ValidOutput]</code>: Parse and call either a single function call or a list of function calls. The <code>verbose</code> parameter, when set to True, prints details about each function call.</li>
-    </ul>
-
-    <h3>reset_session()</h3>
-    <p>The <code>reset_session()</code> method is used to clear the stored outputs from previous function calls. This is useful when you want to start a new sequence of function calls without any interference from previous results. For example:</p>
-    <pre><code class="language-python">engine = FunctionCallingEngine()
-# ... perform some function calls ...
-engine.reset_session()  # Clear all stored outputs
-# ... start a new sequence of function calls ...</code></pre>
-
-    <h2 id="examples">Examples</h2>
-    <h3>1. Chaining Function Calls</h3>
-    <pre><code class="language-python">from tiny_fnc_engine import FunctionCallingEngine
-import random
-
-def get_random_city():
-    cities = ["New York", "London", "Tokyo", "Paris", "Sydney"]
-    return random.choice(cities)
-
-def get_weather_forecast(city):
-    weather_conditions = ["Sunny", "Rainy", "Cloudy", "Snowy"]
-    temperature = random.randint(0, 35)
-    return {
-        "city": city,
-        "condition": random.choice(weather_conditions),
-        "temperature": temperature
-    }
-
-engine = FunctionCallingEngine()
-engine.add_functions([get_random_city, get_weather_forecast])
-
-function_calls = [
-    {
-        "name": "get_random_city",
-        "parameters": {},
-        "returns": [{"name": "random_city", "type": "str"}]
-    },
-    {
-        "name": "get_weather_forecast",
-        "parameters": {"city": "random_city"},
-        "returns": [{"name": "forecast", "type": "dict"}]
-    }
-]
-
-results = engine.parse_and_call_functions(function_calls)
-print(f"Random city: {results[0]}")
-print(f"Weather forecast: {results[1]}")</code></pre>
-
-    <h3>2. Non-chained Function Calls</h3>
-    <pre><code class="language-python">def add(a, b):
-    return a + b
-
-def multiply(a, b):
-    return a * b
-
-engine = FunctionCallingEngine()
-engine.add_functions([add, multiply])
-
-function_calls = [
-    {
-        "name": "add",
-        "parameters": {"a": 5, "b": 3}
-    },
-    {
-        "name": "multiply",
-        "parameters": {"a": 4, "b": 7}
-    }
-]
-
-results = engine.parse_and_call_functions(function_calls)
-print(f"Sum: {results[0]}, Product: {results[1]}")</code></pre>
-
-    <h3>3. Using JSON String Input</h3>
-    <pre><code class="language-python">import json
-from tiny_fnc_engine import FunctionCallingEngine
-
-def greet(name):
-    return f"Hello, {name}!"
-
-def calculate_sum(a, b):
-    return a + b
-
-engine = FunctionCallingEngine()
-engine.add_functions([greet, calculate_sum])
-
-json_string = json.dumps([
-    {
-        "name": "greet",
-        "parameters": {"name": "Alice"},
-        "returns": [{"name": "greeting", "type": "str"}]
-    },
-    {
-        "name": "calculate_sum",
-        "parameters": {"a": 5, "b": 3},
-        "returns": [{"name": "sum", "type": "int"}]
-    }
-])
-
-results = engine.parse_and_call_functions(json_string, verbose=True)
-print(f"Greeting: {results[0]}")
-print(f"Sum: {results[1]}")
-    </code></pre>
-
-    <h2 id="contributing">Contributing</h2>
-    <p>Contributions to tiny_fnc_engine are welcome! Please feel free to submit a Pull Request.</p>
-
-    <h2 id="license">License</h2>
-    <p>This project is licensed under the Apache License 2.0. See the <a href="https://github.com/AtakanTekparmak/tiny_fnc_engine/blob/main/LICENSE">LICENSE</a> file for details.</p>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
-    <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

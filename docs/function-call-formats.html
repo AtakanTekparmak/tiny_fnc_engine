@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tiny_fnc_engine Documentation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>tiny_fnc_engine</h2>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+<li><a href="installation.html">Installation</a></li>
+<li><a href="function-loading.html">Function Loading</a></li>
+<li><a href="function-call-formats.html">Function Call Formats</a></li>
+<li><a href="examples.html">Examples</a></li>
+<li><a href="api-reference.html">API Reference</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="content">
+        <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</div>
+        <h2 id="function-call-formats">Function Call Formats</h2>
+        <p>tiny_fnc_engine supports multiple formats for function calls. The primary format, which allows for chaining functions and referencing previous outputs, includes a "returns" field:</p>
+        
+        <div class="highlight">
+            <h3>Function Calls with Returns (Recommended for Chaining)</h3>
+            <pre><code class="language-python">function_calls = [
+    {
+        "name": "function1",
+        "parameters": {"param1": value1},
+        "returns": [{"name": "return1", "type": "type1"}]
+    },
+    {
+        "name": "function2",
+        "parameters": {"param2": "return1"},
+        "returns": [{"name": "return2", "type": "type2"}]
+    }
+]</code></pre>
+            <p>This format is particularly useful when you need to chain function calls or reference outputs from previous functions. The "returns" field allows you to specify names for the function outputs, which can then be used as parameters in subsequent function calls.</p>
+        </div>
+        
+        <p>For simpler use cases where chaining is not required, you can use the following formats:</p>
+        
+        <h3>1. Single Function Call (Dictionary)</h3>
+        <pre><code class="language-python">function_call = {
+    "name": "function_name",
+    "parameters": {"param1": value1, "param2": value2}
+}</code></pre>
+        
+        <h3>2. Multiple Function Calls (List of Dictionaries)</h3>
+        <pre><code class="language-python">function_calls = [
+    {
+        "name": "function1",
+        "parameters": {"param1": value1}
+    },
+    {
+        "name": "function2",
+        "parameters": {"param2": value2}
+    }
+]</code></pre>
+        
+        <h3>3. JSON String</h3>
+        <p>The engine also accepts JSON strings representing either a single function call or multiple function calls:</p>
+        <pre><code class="language-python">json_string = '''
+{
+    "name": "function_name",
+    "parameters": {"param1": "value1", "param2": 42},
+    "returns": [{"name": "result", "type": "str"}]
+}
+'''
+result = engine.parse_and_call_functions(json_string)
+        </code></pre>
+        <p>or</p>
+        <pre><code class="language-python">json_string = '''
+[
+    {
+        "name": "function1",
+        "parameters": {"param1": "value1"},
+        "returns": [{"name": "result1", "type": "int"}]
+    },
+    {
+        "name": "function2",
+        "parameters": {"param2": 42},
+        "returns": [{"name": "result2", "type": "str"}]
+    }
+]
+'''
+results = engine.parse_and_call_functions(json_string)
+        </code></pre>
+
+        <div class="navigation-buttons">
+            <a href="function-loading.html" class="prev-button">Previous: Function Loading</a>
+            <a href="examples.html" class="next-button">Next: Examples</a>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>  
+    <script src="script.js"></script>
+</body>
+</html>
