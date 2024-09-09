@@ -1,5 +1,12 @@
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+}
+
+function applyDarkMode() {
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
 }
 
 function searchDocs() {
@@ -18,6 +25,7 @@ function searchDocs() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    applyDarkMode();
     const searchInput = document.getElementById('search-input');
     searchInput.addEventListener('input', searchDocs);
 });
