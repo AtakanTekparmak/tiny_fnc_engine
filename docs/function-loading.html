@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tiny_fnc_engine Documentation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>tiny_fnc_engine</h2>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="function-loading.html">Function Loading</a></li>
+                <li><a href="function-call-formats.html">Function Call Formats</a></li>
+                <li><a href="api-reference.html">API Reference</a></li>
+                <li><a href="examples.html">Examples</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="content">
+        <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</div>
+        <h2 id="function-loading">Function Loading</h2>
+        <p>tiny_fnc_engine offers two main ways to load functions into the engine:</p>
+        <h3>1. Direct Function Loading</h3>
+        <pre><code class="language-python">def my_function(param1, param2):
+    return param1 + param2
+
+def my_function2(param1, param2):
+    return param1 * param2
+
+engine = FunctionCallingEngine()
+engine.add_functions([my_function, my_function2])</code></pre>
+        
+        
+        <h3>2. Loading from a File</h3>
+        <pre><code class="language-python">engine = FunctionCallingEngine()
+engine.add_functions_from_file('path/to/functions.py')</code></pre>
+        <p>This method will load all functions in the specified file whose names don't start with "__" into the engine.</p>
+ 
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>  
+    <script src="script.js"></script>
+</body>
+</html>

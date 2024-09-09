@@ -7,11 +7,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="sidebar">
         <div class="sidebar-header">
             <h2>tiny_fnc_engine</h2>
         </div>
+        
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
@@ -25,46 +27,6 @@
     </div>
     <div class="content">
         <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</div>
-        <h1>tiny_fnc_engine Documentation</h1>
-        
-        <p>Welcome to the tiny_fnc_engine documentation. Use the sidebar to navigate through different sections of the documentation.</p>
-        
-        <h2 id="introduction">Introduction</h2>
-        <p>tiny_fnc_engine is a minimal Python library that provides a flexible engine for calling functions extracted from Large Language Model (LLM) outputs in JSON format. The engine stores functions and their outputs in memory, allowing for chained function calls and parameter referencing.</p>
-        
-        <h2 id="features">Features</h2>
-        <ul>
-            <li>Add and call functions dynamically</li>
-            <li>Parse function calls from JSON or string format</li>
-            <li>Chain multiple function calls</li>
-            <li>Store and reference function outputs</li>
-            <li>Support for Pydantic models as function parameters and return values</li>
-            <li>Reset session to clear stored outputs</li>
-            <li>Minimal codebase (one file, 211 lines of code)</li>
-            <li>Parse & call functions from OpenAI compatible "tool_calls" format</li>
-        </ul>
-
-        <h2 id="quickstart">Quickstart</h2>
-        <pre><code class="language-python">from tiny_fnc_engine import FunctionCallingEngine
-
-# Initialize the engine
-engine = FunctionCallingEngine()
-
-# Add functions to the engine
-def greet(name):
-    return f"Hello, {name}!"
-
-engine.add_functions([greet])
-
-# Call a function using JSON format
-result = engine.parse_and_call_functions({
-    "name": "greet",
-    "parameters": {"name": "Alice"},
-    "returns": [{"name": "greeting", "type": "str"}]
-})
-
-print(result[0])  # Output: Hello, Alice!</code></pre>
-        
         <h2 id="installation">Installation</h2>
         <h3>1. Install using pip</h3>
         <p>You can install tiny_fnc_engine using pip:</p>
@@ -77,10 +39,9 @@ print(result[0])  # Output: Hello, Alice!</code></pre>
         <pre><code class="language-bash">curl -o tiny_fnc_engine.py https://raw.githubusercontent.com/AtakanTekparmak/tiny_fnc_engine/main/tiny_fnc_engine/engine.py</code></pre>
         After that, all you need to do is install Pydantic:
         <pre><code class="language-bash">pip install pydantic</code></pre>
-        
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>  
     <script src="script.js"></script>
 </body>
 </html>

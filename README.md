@@ -5,11 +5,12 @@ tiny_fnc_engine is a minimal python library ([one file, 212 lines of code](https
 ## Features
 
 - Add and call functions dynamically
-- Parse function calls from JSON format
+- Parse function calls from JSON or string format
 - Chain multiple function calls
 - Store and reference function outputs
 - Support for [Pydantic](https://github.com/pydantic/pydantic) models as function parameters and return values
 - Reset session to clear stored outputs
+- Parse & call functions from OpenAI compatible "tool_calls" format
 
 ## Documentation
 

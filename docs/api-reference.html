@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tiny_fnc_engine Documentation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>tiny_fnc_engine</h2>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="function-loading.html">Function Loading</a></li>
+                <li><a href="function-call-formats.html">Function Call Formats</a></li>
+                <li><a href="api-reference.html">API Reference</a></li>
+                <li><a href="examples.html">Examples</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="content">
+        <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</div>
+        <h2 id="api-reference">API Reference</h2>
+        <h3>FunctionCallingEngine</h3>
+        <p>The main class of the tiny_fnc_engine library.</p>
+        <h4>Methods:</h4>
+        <ul>
+            <li><code>__init__(self)</code>: Initialize the FunctionCallingEngine.</li>
+            <li><code>reset_session(self) -> None</code>: Reset the session of the engine, clearing stored outputs.</li>
+            <li><code>add_functions(self, functions: list[callable]) -> None</code>: Add functions to the engine.</li>
+            <li><code>add_functions_from_file(self, file_path: str) -> None</code>: Add functions to the engine from a specified .py file.</li>
+            <li><code>call_function(self, function_call: FunctionCall) -> ValidOutput</code>: Call a single function from the engine.</li>
+            <li><code>call_functions(self, function_calls: list[FunctionCall]) -> list[ValidOutput]</code>: Call multiple functions from the engine.</li>
+            <li><code>parse_function_calls(self, function_calls: Union[dict, list[dict]]) -> list[FunctionCall]</code>: Parse either a single function call or a list of function calls.</li>
+            <li><code>parse_and_call_functions(self, function_calls: Union[dict, list[dict], str], verbose: bool = False) -> list[ValidOutput]</code>: Parse and call either a single function call or a list of function calls. The <code>verbose</code> parameter, when set to True, prints details about each function call.</li>
+        </ul>
+        
+        <h3>reset_session()</h3>
+        <p>The <code>reset_session()</code> method is used to clear the stored outputs from previous function calls. This is useful when you want to start a new sequence of function calls without any interference from previous results. For example:</p>
+        <pre><code class="language-python">engine = FunctionCallingEngine()
+# ... perform some function calls ...
+engine.reset_session()  # Clear all stored outputs
+# ... start a new sequence of function calls ...</code></pre>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>  
+    <script src="script.js"></script>
+</body>
+</html>
