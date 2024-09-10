@@ -1,1 +1,1 @@
-from tiny_fnc_engine.engine import FunctionCallingEngine, Parameter, ValidParameter, FunctionCall
+from tiny_fnc_engine.engine import FunctionCallingEngine, Parameter, ValidParameter, FunctionCall, OpenAIToolCall, OpenAIFunction
