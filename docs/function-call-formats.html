@@ -96,6 +96,22 @@ result = engine.parse_and_call_functions(json_string)
 results = engine.parse_and_call_functions(json_string)
         </code></pre>
 
+        <h3>4. OpenAI Tool Calls Format</h3>
+        <p>The engine also supports the OpenAI tool calls format:</p>
+        <pre><code class="language-python">tool_calls = [
+    {
+        "id": "call_123",
+        "function": {
+            "arguments": '{"location": "San Francisco, CA"}',
+            "name": "get_weather_forecast"
+        },
+        "type": "function"
+    }
+]
+results = engine.parse_and_call_functions(tool_calls)
+        </code></pre>
+        <p>This format is compatible with OpenAI's function calling API, making it easy to integrate with OpenAI-powered applications.</p>
+
         <div class="navigation-buttons">
             <a href="function-loading.html" class="prev-button">Previous: Function Loading</a>
             <a href="examples.html" class="next-button">Next: Examples</a>
