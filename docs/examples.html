@@ -121,6 +121,31 @@ print(f"Greeting: {results[0]}")
 print(f"Sum: {results[1]}")
         </code></pre>
 
+        <h3>4. Using OpenAI Tool Calls Format</h3>
+        <pre><code class="language-python">from tiny_fnc_engine import FunctionCallingEngine
+
+def get_weather_forecast(location: str) -> str:
+    # This is a mock function. In a real scenario, you'd call an actual weather API.
+    return f"The weather in {location} is sunny with a high of 75°F."
+
+engine = FunctionCallingEngine()
+engine.add_functions([get_weather_forecast])
+
+tool_calls = [
+    {
+        "id": "call_123",
+        "function": {
+            "arguments": '{"location": "San Francisco, CA"}',
+            "name": "get_weather_forecast"
+        },
+        "type": "function"
+    }
+]
+
+results = engine.parse_and_call_functions(tool_calls)
+print(f"Weather forecast: {results[0]}")
+        </code></pre>
+
         <div class="navigation-buttons">
             <a href="function-call-formats.html" class="prev-button">Previous: Function Call Formats</a>
             <a href="api-reference.html" class="next-button">Next: API Reference</a>

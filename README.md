@@ -31,6 +31,15 @@ tiny_fnc_engine/
 ├── tests/
 │   ├── __init__.py
 │   └── test_engine.py
+├── docs/
+│   ├── index.html
+│   ├── installation.html
+│   ├── function-loading.html
+│   ├── function-call-formats.html
+│   ├── examples.html
+│   ├── api-reference.html
+│   ├── script.js
+│   └── style.css
 ├── main.py
 ├── requirements.txt
 ├── package_requirements.txt
