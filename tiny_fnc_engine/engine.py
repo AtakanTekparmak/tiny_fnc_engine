@@ -195,7 +195,7 @@ class FunctionCallingEngine:
             The OpenAI tool call to be converted.
         """
         function = tool_call['function']
-        arguments = json.loads(function['arguments'])
+        arguments = json.loads(function['arguments']) if isinstance(function['arguments'], str) else function['arguments']
         return FunctionCall(
             name=function['name'],
             parameters=arguments,
