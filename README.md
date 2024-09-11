@@ -111,6 +111,12 @@ Since all the code in the library is located in [a single file](https://github.c
 ```bash
 curl -o tiny_fnc_engine.py https://raw.githubusercontent.com/AtakanTekparmak/tiny_fnc_engine/main/tiny_fnc_engine/engine.py
 ```
+After that, all you need to do is install Pydantic:
+
+```bash
+pip install pydantic
+```
+
 and then use it the same way as in the PyPI installation.
 
 ### 3. Build from Source
